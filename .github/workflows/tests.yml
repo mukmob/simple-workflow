@@ -29,7 +29,18 @@ jobs:
       - name: Start Odoo
         run: |
           docker-compose up -d
-          sleep 30  # Wait for Odoo to start
+          echo "Waiting for Odoo to start..."
+          for i in {1..10}; do
+            if curl -s http://localhost:8069 | grep -q "<title>Odoo</title>"; then
+              echo "Odoo is up!"
+              break
+            fi
+            echo "Waiting for Odoo..."
+            sleep 10
+          done
+
+      - name: Verify Odoo is Running
+        run: curl -I http://localhost:8069
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -41,15 +52,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install ChromeDriver
+      - name: Install Chrome and ChromeDriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-chromedriver
+          sudo apt-get install -y wget unzip
+          wget -q -O google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome.deb || sudo apt-get -f install -y
+          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+\.[0-9]+\.[0-9]+')
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          google-chrome --version
+          chromedriver --version
 
       - name: Run SeleniumBase tests
         run: |
-          export PATH=$PATH:/usr/lib/chromium-browser/
-          pytest tests/ --browser=chrome --headless
+          export PATH=$PATH:/usr/local/bin/
+          pytest tests/ --browser=chrome --headless --disable-warnings -v
 
       - name: Stop Docker Compose
         if: always()
