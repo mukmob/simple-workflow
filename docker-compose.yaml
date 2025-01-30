@@ -12,15 +12,6 @@ services:
       - postgresql_data:/bitnami/postgresql
 
   odoo:
-    environment:
-      ALLOW_EMPTY_PASSWORD: "no"
-      ODOO_DATABASE_HOST: postgresql
-      ODOO_DATABASE_PORT_NUMBER: "5432"
-      ODOO_DATABASE_USER: bn_odoo
-      ODOO_DATABASE_NAME: bitnami_odoo
-      ODOO_DATABASE_PASSWORD: password
-      ODOO_ADDONS_DIR: /opt/bitnami/odoo/addons
-      COVERAGE_FILE: /opt/bitnami/odoo/coverage/.coverage
     build:
       dockerfile: Dockerfile
       context: .
@@ -34,6 +25,8 @@ services:
       - "--log-level=test"
       - "--log-handler=werkzeug:CRITICAL"
       - "--load=base,web"
+      - "--test-tags=hr"
+      - "--stop-after-init"
     ports:
       - "8069:8069"
     depends_on:
@@ -41,6 +34,15 @@ services:
     volumes:
       - "odoo_data:/bitnami/odoo"
       - "odoo_coverage:/opt/bitnami/odoo/coverage"
+    environment:
+      ALLOW_EMPTY_PASSWORD: "no"
+      ODOO_DATABASE_HOST: postgresql
+      ODOO_DATABASE_PORT_NUMBER: "5432"
+      ODOO_DATABASE_USER: bn_odoo
+      ODOO_DATABASE_NAME: bitnami_odoo
+      ODOO_DATABASE_PASSWORD: password
+      ODOO_ADDONS_DIR: /opt/bitnami/odoo/addons
+      COVERAGE_FILE: /opt/bitnami/odoo/coverage/.coverage
 
 volumes:
   postgresql_data:
