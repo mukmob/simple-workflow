@@ -29,18 +29,30 @@ jobs:
           docker-compose up -d
           echo "Waiting for Odoo to start..."
           for i in {1..30}; do
+            # Check logs for confirmation that Odoo has started
             if docker-compose logs odoo | grep -q "HTTP service (werkzeug) running"; then
-              echo "Odoo is ready!"
-              exit 0
+              echo "Odoo logs indicate it has started!"
+              break
             fi
-            echo "Still waiting..."
+            echo "Retry $i: Odoo is still starting..."
             sleep 10
           done
-          echo "Odoo failed to start in time."
-          exit 1
 
-      - name: Verify Odoo is Running
-        run: curl -I http://localhost:8069
+      - name: Verify Odoo is accessible via HTTP
+        run: |
+          echo "Verifying Odoo is accessible via HTTP..."
+
+          for i in {1..10}; do
+            if curl -sSf http://localhost:8069 > /dev/null; then
+              echo "Odoo is ready and responding!"
+              exit 0
+            fi
+            echo "Retry $i: Odoo not accessible yet. Waiting..."
+            sleep 5
+          done
+
+          echo "Odoo failed to start or respond within the timeout."
+          exit 1
 
       - name: Set up Python
         uses: actions/setup-python@v4
