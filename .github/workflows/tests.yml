@@ -59,6 +59,10 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Print Odoo logs on failure
+        if: failure()
+        run: docker-compose logs --tail=100 odoo
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -74,9 +78,6 @@ jobs:
         run: |
           google-chrome --version
           chromedriver --version
-
-      - name: Print Odoo logs
-        run: docker-compose logs --tail=100 odoo
 
       - name: Run SeleniumBase tests
         run: |
