@@ -68,7 +68,7 @@ jobs:
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
-          chromedriver-version: matching
+          install-chromedriver: true
 
       - name: Verify Chrome & ChromeDriver
         run: |
