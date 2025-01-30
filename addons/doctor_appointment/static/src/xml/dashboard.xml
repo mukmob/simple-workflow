@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<template id="template" xml:space="preserve">
+    <t t-name="CustomDashBoard">
+        <div class="o_dashboard container-fluid">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+            <div class="o_dashboard_row">
+                <div id="dashboard-container" class="container-fluid mt-4">
+                    <div id="dashboard-row" class="row g-4">
+                        <!-- Approved Appointments Card -->
+                        <div id="approved-appointments-card" class="col-12 col-sm-6 col-lg">
+                            <div class="dashboard-card" style="background-color: #329DFF;">
+                                <div class="d-flex align-items-center">
+                                    <div id="approved-appointments-icon" class="dashboard-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="approved-appointments-title" class="dashboard-title">
+                                            <b>Approved</b> Appointments
+                                        </h4>
+                                        <!-- <p class="dashboard-value" id="approved-appointments-value">0</p> -->
+                                    </div>
+                                </div>
+                               <!-- <a href="#" class="view-more" data-state="done">View More <i class="fa fa-arrow-right"></i></a> -->
+                            </div>
+                        </div>
+
+
+                        <!-- Pending Appointments Card -->
+                        <div id="pending-appointments-card" class="col-12 col-sm-6 col-lg">
+                            <div class="dashboard-card" style="background-color: #1EBFC4;">
+                                <div class="d-flex align-items-center">
+                                    <div id="pending-appointments-icon" class="dashboard-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="pending-appointments-title" class="dashboard-title">
+                                            <b>Pending</b> Appointments
+                                        </h4>
+                                        <!-- <p class="dashboard-value" id="pending-appointments-value">0</p> -->
+                                    </div>
+                                </div>
+                                <!-- <a href="#" class="view-more" data-state="confirm">View More <i class="fa fa-arrow-right"></i> -->
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Total Appointments Card -->
+                        <div id="total-appointments-card" class="col-12 col-sm-6 col-lg">
+                            <div class="dashboard-card" style="background-color: #ED686C;">
+                                <div class="d-flex align-items-center">
+                                    <div id="total-appointments-icon" class="dashboard-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="total-appointments-title" class="dashboard-title">
+                                            <b>Total</b> Appointments
+                                        </h4>
+                                        <!-- <p class="dashboard-value" id="total-appointments-value">0</p> -->
+
+                                    </div>
+                                </div>
+                                <!-- <a href="#" class="view-more" data-state="include_done_confirm_cancel">View More <i class="fa fa-arrow-right"></i> -->
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Earnings Card -->
+                        <div id="earnings-card" class="col-12 col-sm-6 col-lg">
+                            <div class="dashboard-card" style="background-color: #D171BC;">
+                                <div class="d-flex align-items-center">
+                                    <div id="earnings-icon" class="dashboard-icon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="earnings-title" class="dashboard-title">
+                                            <b>Money</b> Earnings
+                                        </h4>
+                                        <!-- <p class="dashboard-value" id="earnings-value">0</p> -->
+                                    </div>
+                                </div>
+                                <!-- <a href="#" class="view-more" data-state="include_done_confirm_cancel">View More <i class="fa fa-arrow-right"></i> -->
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Patients Card -->
+                        <div id="patients-card" class="col-12 col-sm-6 col-lg">
+                            <div class="dashboard-card" style="background-color: #ABAD5E;">
+                                <div class="d-flex align-items-center">
+                                    <div id="patients-icon" class="dashboard-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="patients-title" class="dashboard-title">
+                                            <b>Number Of</b> Patients
+                                        </h4>
+                                        <!-- <p class="dashboard-value" id="patients-value">0</p> -->
+                                    </div>
+                                </div>
+                                <!-- <a href="#" class="view-more" data-state="include_done_confirm_cancel">View More <i class="fa fa-arrow-right"></i> -->
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="max-height: 700px; overflow-y: auto; scrollbar-width: none;">
+                <div class="o_dashboard_row">
+                    <!-- Chart for Earnings and Booking -->
+                    <div class="o_dashboard_card">
+                        <div class="o_dashboard_chart">
+                            <!-- <canvas id="appointmentsChart"></canvas> -->
+                        </div>
+                    </div>
+
+                    <!-- Today's Appointments List -->
+                    <div class="o_dashboard_card">
+                        <div class="o_dashboard_chart">
+                            <!-- <canvas id="earningChart"></canvas> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_dashboard_row">
+                    <div class="o_dashboard_card">
+                        <div class="o_dashboard_chart">
+                            <div class="dashboard-table-container">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="5" class="fixed-header" style="font-size: 18px; border: 1px solid #dee2e6; border-bottom: 3px solid #dee2e6; padding: 10px; font-weight: bold; text-align: center;">
+                                            Today's Appointments List
+                                            </th>
+                                        </tr>
+
+                                        <tr class="sticky-header">
+                                            <th style="width: 33%;">Doctor</th>
+                                            <th style="width: 35%;">Patient Name</th>
+                                            <th style="width: 10%;">Appointment Time</th>
+                                            <th style="width: 10%;">Price</th>
+                                            <th style="width: 10.3%;">Appointment Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                                <!-- Scrollable Table Body -->
+                                <div class="table-scroll">
+                                    <table class="table table-bordered">
+
+                                        <tbody id="appointments-table-body">
+                                            <!-- Appointments rows will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>

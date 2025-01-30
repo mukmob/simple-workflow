@@ -1,0 +1,19 @@
+[paths]
+source =
+    /opt/bitnami/odoo/addons
+[run]
+omit =
+    */tests/*
+    */__init__.py
+    */__pycache__/*
+    */migrations
+    */context_managers.py
+    */post_init_hook.py
+    */__manifest__.py
+    */static
+    */templates/*
+    */views/*
+    */i18n/*
+    */readme/*
+    */security/*
+    */data/*
