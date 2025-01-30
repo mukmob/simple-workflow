@@ -75,6 +75,9 @@ jobs:
           google-chrome --version
           chromedriver --version
 
+      - name: Print Odoo logs
+        run: docker-compose logs --tail=100 odoo
+
       - name: Run SeleniumBase tests
         run: |
           export PATH=$PATH:/usr/local/bin/
