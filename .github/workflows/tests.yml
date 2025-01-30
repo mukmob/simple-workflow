@@ -24,9 +24,15 @@ jobs:
           echo "runnable"
           docker-compose version
 
+      - name: Prepare modified Docker Compose File
+        run: |
+          cp docker-compose.yaml docker-compose.tests.yaml
+          sed -i '/--test-tags=/d' docker-compose.tests.yaml
+          sed -i '/--stop-after-init/d' docker-compose.tests.yaml
+
       - name: Start Odoo
         run: |
-          docker-compose up -d
+          docker-compose -f docker-compose.tests.yaml up -d
           echo "Waiting for Odoo to start..."
           for i in {1..30}; do
             # Check logs for confirmation that Odoo has started
