@@ -26,6 +26,7 @@ services:
       - "--log-handler=werkzeug:CRITICAL"
       - "--load=base,web"
       - "--test-tags=hr"
+      - "--stop-after-init"
     ports:
       - "8069:8069"
     depends_on:
