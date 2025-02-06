@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+appointment_category_access_user,appointment.category user access,model_appointment_category,base.group_user,1,1,1,1
+access_user_appointment_customer,access_appointment_customer user access,model_appointment_customer,base.group_user,1,1,1,1
+access_user_appointment_doctors,access_appointment_doctors user access,model_appointment_doctors,base.group_user,1,1,1,1
+access_user_appointment_category,access_appointment_category user access,model_appointment_category,base.group_user,1,1,1,1
+access_user_appointment_service,access_appointment_service user access,model_appointment_service,base.group_user,1,1,1,1
+access_user_appointment_time_slot,access_appointment_time_slot user access,model_appointment_time_slot,base.group_user,1,1,1,1
+
+appointment_category_access_public,appointment.category public access,model_appointment_category,base.group_user,1,1,1,1
+access_public_appointment_customer,access_appointment_customer public access,model_appointment_customer,base.group_public,1,1,1,1
+access_public_appointment_doctors_1,access_appointment_doctors public access,model_appointment_doctors,base.group_public,1,1,1,1
+access_public_appointment_category,access_appointment_category public access,model_appointment_category,base.group_public,1,1,1,1
+access_public_appointment_service,access_appointment_service public access,model_appointment_service,base.group_public,1,1,1,1
+access_public_appointment_time_slot,access_appointment_time_slot public access,model_appointment_time_slot,base.group_public,1,1,1,1
+
+portal_appointment_category_access,appointment.category portal access,model_appointment_category,base.group_portal,1,0,0,0
+portal_appointment_customer_access,appointment.customer portal access,model_appointment_customer,base.group_portal,1,1,1,0
+portal_appointment_doctors_access,appointment.doctors portal access,model_appointment_doctors,base.group_portal,1,0,0,0
+portal_appointment_service_access,appointment.service portal access,model_appointment_service,base.group_portal,1,0,0,0
+portal_appointment_time_slot_access,appointment.time_slot portal access,model_appointment_time_slot,base.group_portal,1,0,0,0
+

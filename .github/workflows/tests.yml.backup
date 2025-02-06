@@ -1,0 +1,95 @@
+name: Run SeleniumBase Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          echo "Docker installed"
+          sudo chmod +x /usr/local/bin/docker-compose
+          echo "runnable"
+          docker-compose version
+
+      - name: Prepare modified Docker Compose File
+        run: |
+          cp docker-compose.yaml docker-compose.tests.yaml
+          sed -i '/--test-tags=/d' docker-compose.tests.yaml
+          sed -i '/--stop-after-init/d' docker-compose.tests.yaml
+
+      - name: Start Odoo
+        run: |
+          docker-compose -f docker-compose.tests.yaml up -d
+          echo "Waiting for Odoo to start..."
+          for i in {1..30}; do
+            # Check logs for confirmation that Odoo has started
+            if docker-compose logs odoo | grep -q "HTTP service (werkzeug) running"; then
+              echo "Odoo logs indicate it has started!"
+              break
+            fi
+            echo "Retry $i: Odoo is still starting..."
+            sleep 10
+          done
+
+      - name: Verify Odoo is accessible via HTTP
+        run: |
+          echo "Verifying Odoo is accessible via HTTP..."
+
+          for i in {1..10}; do
+            if curl -sSf http://localhost:8069 > /dev/null; then
+              echo "Odoo is ready and responding!"
+              exit 0
+            fi
+            echo "Retry $i: Odoo not accessible yet. Waiting..."
+            sleep 5
+          done
+
+          echo "Odoo failed to start or respond within the timeout."
+          exit 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+
+      - name: Verify Chrome & ChromeDriver
+        run: |
+          google-chrome --version
+          chromedriver --version
+
+      - name: Run SeleniumBase tests
+        run: |
+          export PATH=$PATH:/usr/local/bin/
+          pytest tests/ --browser=chrome --headless --disable-warnings -v
+
+      - name: Print Odoo logs on failure
+        if: failure()
+        run: docker-compose logs --tail=300 odoo
+
+      - name: Stop Docker Compose
+        if: always()
+        run: docker-compose down

@@ -1,0 +1,54 @@
+version: '3.1'
+
+services:
+  postgresql:
+    image: docker.io/bitnami/postgresql:13
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      ALLOW_EMPTY_PASSWORD: "yes"
+      POSTGRESQL_USERNAME: bn_odoo
+      POSTGRESQL_DATABASE: bitnami_odoo
+    volumes:
+      - postgresql_data:/bitnami/postgresql
+
+  odoo:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        ADDONS_PATH: "/opt/bitnami/odoo/addons"
+    container_name: odoo
+    command:
+      - "/opt/bitnami/scripts/odoo/run.sh"
+      - "-i"
+      - "doctor_appointment"
+      - "--log-level=test"
+      - "--log-handler=werkzeug:CRITICAL"
+      - "--load=base,web"
+      - "--test-tags=hr"
+      - "--stop-after-init"
+    ports:
+      - "8069:8069"
+    depends_on:
+      - postgresql
+    volumes:
+      - "odoo_data:/bitnami/odoo"
+      - "odoo_coverage:/opt/bitnami/odoo/coverage"
+    environment:
+      ALLOW_EMPTY_PASSWORD: "no"
+      ODOO_DATABASE_HOST: postgresql
+      ODOO_DATABASE_PORT_NUMBER: "5432"
+      ODOO_DATABASE_USER: bn_odoo
+      ODOO_DATABASE_NAME: bitnami_odoo
+      ODOO_DATABASE_PASSWORD: password
+      ODOO_ADDONS_DIR: /opt/bitnami/odoo/addons
+      COVERAGE_FILE: /opt/bitnami/odoo/coverage/.coverage
+
+volumes:
+  postgresql_data:
+    driver: local
+  odoo_data:
+    driver: local
+  odoo_coverage:
+    driver: local
+  pgadmin_data:
