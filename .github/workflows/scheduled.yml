@@ -13,7 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        ref: main  # Checks out the `main` branch
+        ref: develop  # Checks out the `develop` branch
 
     - name: Run a script
-      run: echo "This job runs every 5 minutes on the develop branch"
+      run: |
+        echo "Content of example.txt:"
+        cat example.txt
